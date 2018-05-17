@@ -17,7 +17,7 @@ pipeline {
 
     stage('Publish Docker image to registry') {
       steps {
-        sh './build/publish'
+        sh './bin/publish'
       }
     }
   }
