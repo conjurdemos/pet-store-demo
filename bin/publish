@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Pushes the pet-store image to the internal registry as "latest" and VERSION
+set -e
+
+readonly REGISTRY="${1:-registry2.itci.conjur.net}"
+readonly IMAGE_NAME="pet-store"
+readonly IMAGE_TAG="$(cat VERSION)"
+
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/"${IMAGE_NAME}:${IMAGE_TAG}"
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/"${IMAGE_NAME}:latest"
+
+docker push "${REGISTRY}/"${IMAGE_NAME}:${IMAGE_TAG}"
+docker push "${REGISTRY}/"${IMAGE_NAME}:latest"

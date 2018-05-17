@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+#
+set -e
+
+readonly IMAGE_NAME="pet-store"
+readonly IMAGE_TAG="$(cat VERSION)"
+
+docker run --rm \
+  -v "$(pwd)":/app \
+  maven:3.5.0-jdk-8 \
+  bash -c "cd /app; mvn package"
+
+docker build \
+  -t "${IMAGE_NAME}:${IMAGE_TAG}" \
+  .
