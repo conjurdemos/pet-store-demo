@@ -3,7 +3,7 @@
 # Pushes the pet-store image to the internal registry as "latest" and VERSION
 set -ex
 
-readonly REGISTRY="${1:-registry2.itci.conjur.net}"
+readonly REGISTRY="${1:-registry2.itci.conjur.net/conjurinc}"
 readonly IMAGE_NAME="pet-store"
 readonly IMAGE_TAG="$(cat VERSION)"
 
