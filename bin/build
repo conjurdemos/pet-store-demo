@@ -14,3 +14,5 @@ docker run --rm \
 docker build \
   -t "${IMAGE_NAME}:${IMAGE_TAG}" \
   .
+
+docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
