@@ -63,3 +63,11 @@ Remove a pet from inventory
 ##### Returns
 `404`
 `200`
+
+---
+`GET` `/vulnerable`
+Return a JSON representation of all environment variables that
+the app knows about
+##### Returns
+`200`
+
