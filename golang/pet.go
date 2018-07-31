@@ -3,7 +3,6 @@ package main
 import (
     "encoding/json"
     "net/http"
-    "fmt"
     "github.com/gorilla/mux"
     "strconv"
 )
@@ -17,23 +16,8 @@ type ErrorResponse struct {
    Error string `json:"error"`
 }
 
-// UTILS
-func prettyPrint(payload interface{}) ([]byte) {
-    prettyBytes, _ := json.MarshalIndent(payload,"","  ")
-    prettyBytes = append(prettyBytes, '\n')
+// handlers
 
-    return prettyBytes
-}
-
-func respondWithError(w http.ResponseWriter, err error) {
-    fmt.Println(fmt.Errorf("Error: %v", err))
-    w.WriteHeader(http.StatusInternalServerError)
-    w.Write(prettyPrint(ErrorResponse{
-        Error:   err.Error(),
-    }))
-}
-
-// HANDLERS
 func getPetHandler(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
 
