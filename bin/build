@@ -3,7 +3,7 @@
 #
 set -e
 
-readonly IMAGE_NAME="pet-store"
+readonly IMAGE_NAME="demo-app"
 readonly IMAGE_TAG="$(cat VERSION)"
 
 docker run --rm \
