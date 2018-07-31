@@ -71,3 +71,6 @@ the app knows about
 ##### Returns
 `200`
 
+# License
+
+The Pet Store demo app is licensed under Apache License 2.0 - see [`LICENSE.md`](LICENSE.md) for more details.
