@@ -8,14 +8,17 @@ import (
 
     "github.com/gorilla/mux"
     _ "github.com/lib/pq"
+    "strings"
 )
 
 func newRouter() *mux.Router {
     r := mux.NewRouter()
-    r.HandleFunc("/hello", handler).Methods("GET")
+    r.HandleFunc("/hello", helloHandler).Methods("GET")
+    r.HandleFunc("/vulnerable", vulnerableHandler).Methods("GET")
 
     r.HandleFunc("/pets", getPetsHandler).Methods("GET")
     r.HandleFunc("/pet", createPetHandler).Methods("POST")
+    r.HandleFunc("/pet/{id}", getPetHandler).Methods("GET")
     return r
 }
 
@@ -27,6 +30,8 @@ func main() {
     if err != nil {
         panic(err)
     }
+    defer db.Close()
+
     err = db.Ping()
 
     if err != nil {
@@ -41,6 +46,12 @@ func main() {
     http.ListenAndServe(":8080", r)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func helloHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "Hello World!")
+    fmt.Fprintf(w, "\n")
+}
+
+func vulnerableHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, strings.Join(os.Environ(), "\n"))
+    fmt.Fprintf(w, "\n")
 }

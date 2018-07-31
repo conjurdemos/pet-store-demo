@@ -2,42 +2,64 @@ package main
 
 import (
     "encoding/json"
-    "fmt"
     "net/http"
+    "fmt"
+    "github.com/gorilla/mux"
+    "strconv"
 )
 
 type Pet struct {
-    Name     string `json:"name"`
+    ID     int64 `json:"id"`
+    Name   string `json:"name"`
 }
 
 type ErrorResponse struct {
    Error string `json:"error"`
 }
 
-func errorJSONBytes(err error) []byte {
-    errBytes, _ := json.Marshal(ErrorResponse{
+// UTILS
+func prettyPrint(payload interface{}) ([]byte) {
+    prettyBytes, _ := json.MarshalIndent(payload,"","  ")
+    prettyBytes = append(prettyBytes, '\n')
+
+    return prettyBytes
+}
+
+func respondWithError(w http.ResponseWriter, err error) {
+    fmt.Println(fmt.Errorf("Error: %v", err))
+    w.WriteHeader(http.StatusInternalServerError)
+    w.Write(prettyPrint(ErrorResponse{
         Error:   err.Error(),
-    })
-    return errBytes
+    }))
+}
+
+// HANDLERS
+func getPetHandler(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+
+    id, err := strconv.Atoi(vars["id"])
+    if err != nil {
+        respondWithError(w, err)
+        return
+    }
+
+    pet, err := store.GetPet(int64(id))
+    if err != nil {
+        respondWithError(w, err)
+        return
+    }
+
+    w.Write(prettyPrint(pet))
 }
 
 func getPetsHandler(w http.ResponseWriter, r *http.Request) {
     pets, err := store.GetPets()
     if err != nil {
-        fmt.Println(fmt.Errorf("Error: %v", err))
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write(errorJSONBytes(err))
+        respondWithError(w, err)
         return
     }
 
-    petListBytes, err := json.Marshal(pets)
-    if err != nil {
-        fmt.Println(fmt.Errorf("Error: %v", err))
-        w.WriteHeader(http.StatusInternalServerError)
-        return
-    }
-
-    w.Write(petListBytes)
+    w.Write(prettyPrint(pets))
 }
 
 func createPetHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,15 +67,14 @@ func createPetHandler(w http.ResponseWriter, r *http.Request) {
     var pet Pet
     err := decoder.Decode(&pet)
     if err != nil {
-        fmt.Println(fmt.Errorf("Error: %v", err))
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write(errorJSONBytes(err))
+        respondWithError(w, err)
         return
     }
 
     err = store.CreatePet(&pet)
     if err != nil {
-        fmt.Println(err)
+        respondWithError(w, err)
+        return
     }
 
     w.WriteHeader(http.StatusCreated)
