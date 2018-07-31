@@ -13,7 +13,6 @@ import (
 
 func newRouter() *mux.Router {
     r := mux.NewRouter()
-    r.HandleFunc("/hello", helloHandler).Methods("GET")
     r.HandleFunc("/vulnerable", vulnerableHandler).Methods("GET")
 
     r.HandleFunc("/pets", getPetsHandler).Methods("GET")
@@ -44,11 +43,6 @@ func main() {
     fmt.Println("Serving on port 8080")
     http.NewServeMux()
     http.ListenAndServe(":8080", r)
-}
-
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello World!")
-    fmt.Fprintf(w, "\n")
 }
 
 func vulnerableHandler(w http.ResponseWriter, r *http.Request) {
