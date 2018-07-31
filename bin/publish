@@ -3,7 +3,7 @@
 # Pushes the pet-store image to the internal registry as "latest" and VERSION
 set -ex
 
-readonly REGISTRY="${1:-cyberark/}"
+readonly REGISTRY="${1:-cyberark}"
 readonly IMAGE_NAME="demo-app"
 readonly IMAGE_TAG="$(cat VERSION)"
 
