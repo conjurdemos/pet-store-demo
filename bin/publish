@@ -3,8 +3,8 @@
 # Pushes the pet-store image to the internal registry as "latest" and VERSION
 set -ex
 
-readonly REGISTRY="${1:-registry2.itci.conjur.net/conjurinc}"
-readonly IMAGE_NAME="pet-store"
+readonly REGISTRY="${1:-cyberark/}"
+readonly IMAGE_NAME="demo-app"
 readonly IMAGE_TAG="$(cat VERSION)"
 
 docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
