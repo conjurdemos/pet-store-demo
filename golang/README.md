@@ -13,10 +13,12 @@ docker run --net demonet \
  -e POSTGRES_PASSWORD=mysecretpassword \
  postgres:9.6
 
+# setup environment
 sleep 2
 DB_URL="postgres://demo-postgres:5432/postgres?sslmode=disable"
 DB_USERNAME="postgres"
 DB_PASSWORD="mysecretpassword"
+
 # create application table
 docker run --net demonet \
  --rm \
