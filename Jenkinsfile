@@ -15,6 +15,13 @@ pipeline {
       }
     }
 
+    stage('Test') {
+      steps {
+        sh './test/test.sh postgres'
+        sh './test/test.sh mysql'
+      }
+    }
+
     stage('Publish Docker image to registry') {
       when {
         branch 'master'
