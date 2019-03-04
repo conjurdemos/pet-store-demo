@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 cd $(dirname $0);
 
@@ -23,6 +23,7 @@ mysql)  export DB_TYPE=mysql
 esac
 
 cleanup () {
+  docker-compose logs app;
   docker-compose down -v;
 }
 trap cleanup EXIT QUIT INT;
@@ -43,11 +44,13 @@ echo ""
 docker-compose up -d app test;
 
 echo "Waiting for app"
-while ! docker-compose exec -T test curl -v app:8080 > /dev/null 2>&1;
-  do
-    >&2 printf '. '
-    sleep 1
+docker-compose exec -T test timeout 10 bash -c "
+while ! curl -v app:8080 > /dev/null 2>&1;
+do
+  >&2 printf '. '
+  sleep 1
 done
+"
 
 echo ""
 >&2 echo "app is up - continuing"
