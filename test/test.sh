@@ -44,7 +44,7 @@ echo ""
 docker-compose up -d app test;
 
 echo "Waiting for app"
-docker-compose exec -T test timeout 10 bash -c "
+docker-compose exec -T test timeout 200 bash -c "
 while ! curl -v app:8080 > /dev/null 2>&1;
 do
   >&2 printf '. '
