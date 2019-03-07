@@ -1,0 +1,32 @@
+version: "3"
+services:
+  app:
+    image: demo-app:latest
+    environment:
+      DB_PLATFORM:
+      DB_URL:
+      DB_USERNAME:
+# common
+      DB_PASSWORD: securerootpass
+  postgres:
+    image: postgres:9.6
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 30s
+    environment:
+      POSTGRES_PASSWORD: securerootpass
+  mysql:
+    image: mysql/mysql-server:5.7
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin -psecurerootpass status"]
+      interval: 1s
+      timeout: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: securerootpass
+      MYSQL_DATABASE: mysql
+    volumes:
+    - ./test.sql:/docker-entrypoint-initdb.d/test.sql
+  test:
+    image: mysql/mysql-server:5.7
+    command: sleep infinity

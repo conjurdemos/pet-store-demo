@@ -9,6 +9,7 @@ When running the pet-store, the following environment variables are expected:
 `DB_URL` Url or connection string  
 `DB_USERNAME` Username to connect as (not required for secretless)  
 `DB_PASSWORD` Password to connect as (not required for secretless)  
+`DB_PLATFORM` Platform to use in the DDL or DML scripts (such as schema-${platform}.sql or data-${platform}.sql)
 
 ### Routes
 The demo application mocks a pet store service which controls an inventory of pets in a persistent database. The following routes are exposed:
