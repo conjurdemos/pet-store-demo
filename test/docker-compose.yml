@@ -12,16 +12,18 @@ services:
     image: postgres:9.6
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 1s
-      timeout: 30s
+      timeout: 10s
+      interval: 10s
+      retries: 10
     environment:
       POSTGRES_PASSWORD: securerootpass
   mysql:
     image: mysql/mysql-server:5.7
     healthcheck:
-      test: ["CMD-SHELL", "mysql --execute \"SHOW DATABASES\""]
-      interval: 1s
-      timeout: 30s
+      test: ["CMD-SHELL", "mysqladmin ping"]
+      timeout: 10s
+      interval: 10s
+      retries: 10
     environment:
       MYSQL_ROOT_PASSWORD: securerootpass
       MYSQL_DATABASE: mysql
