@@ -3,7 +3,7 @@ services:
   app:
     image: demo-app:latest
     environment:
-      DB_TYPE:
+      DB_PLATFORM:
       DB_URL:
       DB_USERNAME:
 # common

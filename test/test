@@ -9,11 +9,11 @@ then
 fi
 
 case "$1" in
-postgres) export DB_TYPE=postgres
+postgres) export DB_PLATFORM=postgres
           export DB_URL=postgresql://postgres:5432/postgres
           export DB_USERNAME=postgres
           ;;
-mysql)  export DB_TYPE=mysql
+mysql)  export DB_PLATFORM=mysql
         export DB_URL=mysql://mysql:3306/mysql
         export DB_USERNAME=mysql
         ;;
@@ -29,17 +29,17 @@ cleanup () {
 trap cleanup EXIT QUIT INT;
 
 cleanup;
-docker-compose up -d ${DB_TYPE};
+docker-compose up -d ${DB_PLATFORM};
 
-echo "Waiting for $DB_TYPE to start"
-while ! docker-compose ps ${DB_TYPE} | grep healthy > /dev/null 2>&1;
+echo "Waiting for $DB_PLATFORM to start"
+while ! docker-compose ps ${DB_PLATFORM} | grep healthy > /dev/null 2>&1;
   do
     >&2 printf '. '
     sleep 1
 done
 
 echo ""
->&2 echo "$DB_TYPE is up - continuing"
+>&2 echo "$DB_PLATFORM is up - continuing"
 
 docker-compose up -d app test;
 
