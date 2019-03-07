@@ -17,8 +17,8 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh './test/test.sh postgres'
-        sh './test/test.sh mysql'
+        sh './test/test postgres'
+        sh './test/test mysql'
       }
     }
 
