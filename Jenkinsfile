@@ -10,8 +10,8 @@ pipeline {
 
   environment {
       OPENSHIFT_URL         = 'https://openshift-311.itci.conjur.net:8443'
-      OPENSHIFT_USER        = credentials('oc-311-user')
-      OPENSHIFT_PASSWORD    = credentials('oc-311-password')
+      OPENSHIFT_USER        = ''
+      OPENSHIFT_PASSWORD    = ''
 
       DOCKER_REGISTRY_PATH  = 'docker-registry-default.openshift-311.itci.conjur.net'
       PROJECT_NAME          = 'p2p-pet-store'
