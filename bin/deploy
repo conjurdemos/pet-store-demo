@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+
+docker run --rm openshift/origin-cli bash <<EOF
+  oc --help
+EOF

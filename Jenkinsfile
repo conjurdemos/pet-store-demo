@@ -22,15 +22,21 @@ pipeline {
       }
     }
 
-    stage('Publish Docker image to registry') {
-      when {
-        branch 'master'
-      }
-
+    stage('Deploy to OpenShift') {
       steps {
-        sh './bin/publish'
+        sh './bin/deploy'
       }
     }
+
+    // stage('Publish Docker image to registry') {
+    //   when {
+    //     branch 'master'
+    //   }
+
+    //   steps {
+    //     sh './bin/publish'
+    //   }
+    // }
   }
 
   post {
