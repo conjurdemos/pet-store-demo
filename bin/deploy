@@ -1,5 +1,50 @@
 #!/bin/bash -eu
 
-docker run --rm openshift/origin-cli bash <<EOF
-  oc --help
+readonly IMAGE_NAME="demo-app"
+readonly IMAGE_TAG="$(cat VERSION)"
+
+readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:${PROJECT_NAME}"
+
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${OPENSHIFT_IMAGE}"
+docker push "${OPENSHIFT_IMAGE}"
+
+docker run --rm -i openshift/origin-cli /bin/bash <<EOF
+  main() {
+    # Login
+    oc login $OPENSHIFT_URL \
+      --username="$OPENSHIFT_USER" \
+      --password="$OPENSHIFT_PASSWORD" \
+      --insecure-skip-tls-verify=true
+
+    # Ensure namespace exists
+    if has_namespace "${PROJECT_NAME}"; then
+      echo "Namespace already exists."
+    else
+      oc new-project "${PROJECT_NAME}" \
+        --description="Pet Store from Pitch to Production" \
+        --display-name="Pet Store"
+    fi
+
+    oc delete all -l app=pet-store
+
+    # Deploy container
+    oc new-app p2p-pet-store/demo-app:p2p-pet-store --name=pet-store
+
+    oc expose svc/pet-store
+  }
+
+  has_namespace() {
+    if oc get namespace "\$1" &> /dev/null; then
+      true
+    else
+      false
+    fi
+  }
+
+  # has_serviceaccount() {
+  #   oc get serviceaccount "\$1" &> /dev/null;
+  # }
+
+  main
+
 EOF
