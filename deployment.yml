@@ -20,6 +20,17 @@ metadata:
   name: pet-store
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pet-store-secrets-yml
+  labels:
+    app: pet-store
+data:
+  secrets.sh: |
+    export DB_USERNAME=test
+    export DB_PASSWORD=test
+---
+apiVersion: v1
 kind: DeploymentConfig
 metadata:
   labels:
@@ -60,17 +71,20 @@ spec:
       - image: 'docker-registry-default.openshift-311.itci.conjur.net/pet-store/filewriter:latest'
         imagePullPolicy: Always
         name: writer
-        env:
-          - name: DB_USERNAME
-            value: "test"
-          - name: DB_PASSWORD
-            value: "test"
+    
         volumeMounts:
           - mountPath: /data
             name: data-mount
+          - mountPath: /app/secrets.sh
+            name: pet-store-secrets-yml
+            subPath: secrets.sh
+          
       imagePullSecrets:
         - name: dockerpullsecret
       volumes:
         - name: data-mount
           emptyDir:
             medium: Memory
+        - name: pet-store-secrets-yml
+          configMap:
+            name: pet-store-secrets-yml
