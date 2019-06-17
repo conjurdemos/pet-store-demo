@@ -5,11 +5,31 @@ readonly IMAGE_TAG="$(cat VERSION)"
 
 readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:${PROJECT_NAME}"
 
+echo "Create project"
+oc delete project pet-store
+oc new-project pet-store
+
+echo "Publish docker images"
+docker login -u _ -p "$(oc whoami -t)" ${DOCKER_REGISTRY_PATH}
 docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${OPENSHIFT_IMAGE}"
 docker push "${OPENSHIFT_IMAGE}"
 
 docker tag "filewriter:latest" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
 docker push "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
+
+echo "Add pull secret"
+oc secrets new-dockercfg dockerpullsecret \
+      --docker-server=${DOCKER_REGISTRY_PATH} \
+      --docker-username=_ \
+      --docker-password=$(oc whoami -t) \
+      --docker-email=_
+oc secrets add serviceaccount/default secrets/dockerpullsecret --for=pull
+
+echo "Create deployment"
+oc create -f deployment.yml
+
+echo "Expose service"
+oc expose service/pet-store
 
 # docker run --rm -i openshift/origin-cli /bin/bash <<EOF
 #   main() {
