@@ -8,43 +8,46 @@ readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:
 docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${OPENSHIFT_IMAGE}"
 docker push "${OPENSHIFT_IMAGE}"
 
-docker run --rm -i openshift/origin-cli /bin/bash <<EOF
-  main() {
-    # Login
-    oc login $OPENSHIFT_URL \
-      --username="$OPENSHIFT_USER" \
-      --password="$OPENSHIFT_PASSWORD" \
-      --insecure-skip-tls-verify=true
+docker tag "filewriter:latest" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
+docker push "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
 
-    # Ensure namespace exists
-    if has_namespace "${PROJECT_NAME}"; then
-      echo "Namespace already exists."
-    else
-      oc new-project "${PROJECT_NAME}" \
-        --description="Pet Store from Pitch to Production" \
-        --display-name="Pet Store"
-    fi
+# docker run --rm -i openshift/origin-cli /bin/bash <<EOF
+#   main() {
+#     # Login
+#     oc login $OPENSHIFT_URL \
+#       --username="$OPENSHIFT_USER" \
+#       --password="$OPENSHIFT_PASSWORD" \
+#       --insecure-skip-tls-verify=true
 
-    oc delete all -l app=pet-store
+#     # Ensure namespace exists
+#     if has_namespace "${PROJECT_NAME}"; then
+#       echo "Namespace already exists."
+#     else
+#       oc new-project "${PROJECT_NAME}" \
+#         --description="Pet Store from Pitch to Production" \
+#         --display-name="Pet Store"
+#     fi
 
-    # Deploy container
-    oc new-app p2p-pet-store/demo-app:p2p-pet-store --name=pet-store
+#     oc delete all -l app=pet-store
 
-    oc expose svc/pet-store
-  }
+#     # Deploy container
+#     oc new-app p2p-pet-store/demo-app:p2p-pet-store --name=pet-store
 
-  has_namespace() {
-    if oc get namespace "\$1" &> /dev/null; then
-      true
-    else
-      false
-    fi
-  }
+#     oc expose svc/pet-store
+#   }
 
-  # has_serviceaccount() {
-  #   oc get serviceaccount "\$1" &> /dev/null;
-  # }
+#   has_namespace() {
+#     if oc get namespace "\$1" &> /dev/null; then
+#       true
+#     else
+#       false
+#     fi
+#   }
 
-  main
+#   # has_serviceaccount() {
+#   #   oc get serviceaccount "\$1" &> /dev/null;
+#   # }
 
-EOF
+#   main
+
+# EOF

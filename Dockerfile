@@ -26,6 +26,6 @@ MAINTAINER CyberArk
 
 COPY --from=maven /app/app.jar /app.jar
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT [ "java", "-jar", "/app.jar"]
