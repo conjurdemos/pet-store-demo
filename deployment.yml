@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pet-store
+  labels:
+    app: pet-store
+spec:
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: pet-store
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pet-store
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: pet-store
+  name: pet-store
+spec:
+  replicas: 1
+  selector:
+    app: pet-store
+  template:
+    metadata:
+      labels:
+        app: pet-store
+    spec:
+      serviceAccountName: pet-store
+      containers:
+      - image: 'docker-registry-default.openshift-311.itci.conjur.net/pet-store/demo-app:pet-store'
+        imagePullPolicy: Always
+        name: pet-store
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /pets
+            port: http
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        env:
+          - name: DB_PLATFORM
+            value: "postgres"
+          - name: DB_URL
+            value: "postgresql://xapas-p2p.cupksrq0shff.us-east-1.rds.amazonaws.com:5432/xapas_p2p"
+        volumeMounts:
+          - mountPath: /data
+            name: data-mount
+            readOnly: true
+      - image: 'docker-registry-default.openshift-311.itci.conjur.net/pet-store/filewriter:latest'
+        imagePullPolicy: Always
+        name: writer
+        env:
+          - name: DB_USERNAME
+            value: "test"
+          - name: DB_PASSWORD
+            value: "test"
+        volumeMounts:
+          - mountPath: /data
+            name: data-mount
+      imagePullSecrets:
+        - name: dockerpullsecret
+      volumes:
+        - name: data-mount
+          emptyDir:
+            medium: Memory
