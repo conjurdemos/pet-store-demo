@@ -22,8 +22,8 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource getDataSource() throws IOException {
-        String username = getSecretFromFile("/data/DB_USERNAME");
-        String password = getSecretFromFile("/data/DB_PASSWORD");
+        String username = getSecretFromFile("/run/conjur/secrets/DB_USERNAME");
+        String password = getSecretFromFile("/run/conjur/secrets/DB_PASSWORD");
         return DataSourceBuilder
                 .create()
                 .username(username)

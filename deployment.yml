@@ -18,6 +18,30 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: pet-store
+  labels:
+    app: pet-store
+---
+apiVersion: v1
+kind: ClusterRole
+metadata:
+  namespace: pet-store
+  name: pet-store-secrets-access
+rules:
+  - resources: ["secrets"]
+    verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+---
+apiVersion: v1
+kind: RoleBinding
+metadata:
+  namespace: pet-store
+  name: pet-store-secrets-access-binding
+subjects:
+  - kind: ServiceAccount
+    name: pet-store
+    namespace: pet-store
+roleRef:
+  kind: Role
+  name: pet-store-secrets-access
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -26,9 +50,65 @@ metadata:
   labels:
     app: pet-store
 data:
-  secrets.sh: |
-    export DB_USERNAME=test
-    export DB_PASSWORD=test
+  secrets.yml: |
+    DB_USERNAME: !var secrets/db_username
+    DB_PASSWORD: !var secrets/db_password
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: conjur-master
+  label:
+    app: pet-store
+data:
+  ssl-certificate: |
+    -----BEGIN CERTIFICATE-----
+    MIIDfDCCAmSgAwIBAgIVAOLsjhYmhKsOOOG7akw1xv2prwx7MA0GCSqGSIb3DQEB
+    CwUAMDwxDjAMBgNVBAoMBW1pY2FoMRIwEAYDVQQLDAlDb25qdXIgQ0ExFjAUBgNV
+    BAMMDWNvbmp1ci1tYXN0ZXIwHhcNMTkwNjIwMDYzMzI3WhcNMjkwNjE3MDYzMzI3
+    WjAaMRgwFgYDVQQDDA9jb25qdXItZm9sbG93ZXIwggEiMA0GCSqGSIb3DQEBAQUA
+    A4IBDwAwggEKAoIBAQDOzd8fvrBU//1BYfN3noD45U+ZZmIKCCuCBUgNM/a9TWvC
+    IYnmIe3BD6zGmdL9EtdTA4b27Zx6Z/vLNMkb10fOg2ZDF1f/ZCyVsK7lESAvEAQl
+    O7ZnMeVNZCEA2VEtIR5ktqrU4sWLcv6Gj44aKw/X+eYSh55dmDdDoUOHO3YxzJW4
+    3CcTmCvwR7JPbyBkHqxweQujY9UUmh5KTd0AGPmm64WnogVDeOdGWqrtrwVMlcXc
+    kEhA9o2/KqGlwc8/+lcFr1lSyQP/FD34LeGz9Siimng1IvsTwd2SVTvkXMH/nEOO
+    HV7jtJgNkE6syB+5li0VGkJhUqPhfuxJT89tyGoDAgMBAAGjgZYwgZMwDgYDVR0P
+    AQH/BAQDAgWgMB0GA1UdDgQWBBTaOaPuXmtLDTJVv++VYBiQr9gHCTBiBgNVHREE
+    WzBZgg9jb25qdXItZm9sbG93ZXKCD2Nvbmp1ci1mb2xsb3dlcoI1Y29uanVyLWZv
+    bGxvd2VyLmNvbmp1ci1kZXBsb3ktbWljYWguc3ZjLmNsdXN0ZXIubG9jYWwwDQYJ
+    KoZIhvcNAQELBQADggEBAKAZ+EEdG0DqW9tJ9yYU9pJIn6IOkAUMQN3sG3SX7NnX
+    hT3oK0gt2xcO3O2UqmMIyDyGo/FiDnxHNSx4/tsVfuzgH9ZJkuCyDKdoa7p1VU9k
+    mPf6T7KxZSp//W8ygyVOT+7V9oQXtN+q3vo4tjAQ3rEwvpufIBAitoaOMuBVb6xY
+    GcAVqe+RWDMYjLu9LJyUlZJGOKdM5Vf0lGEG8qsTotJ9U8I4WVbbsmSByQxyJmBT
+    T4HycZAoMwDRLx8VkNi3gDVtnSs9wtn2n2PJbXo3zUOJHhYT/oIWDrqLnvCNHbKC
+    n4TXYIc6c5lQ+Rz+j6KMT88tdYFpWZEexqzMz1Vl7J8=
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIEAzCCAuugAwIBAgIUNV2VJZQfx03xCRgr0iOvmdIGPcwwDQYJKoZIhvcNAQEL
+    BQAwPDEOMAwGA1UECgwFbWljYWgxEjAQBgNVBAsMCUNvbmp1ciBDQTEWMBQGA1UE
+    AwwNY29uanVyLW1hc3RlcjAeFw0xOTA2MjAwNjMxMzZaFw0yOTA2MTcwNjMxMzZa
+    MDwxDjAMBgNVBAoMBW1pY2FoMRIwEAYDVQQLDAlDb25qdXIgQ0ExFjAUBgNVBAMM
+    DWNvbmp1ci1tYXN0ZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDM
+    cQvF/4jdf28UQRJusiJOyiK6leDnx2zRWBuoE17njq6SDcxuwlq8z1nZAZiuYUx6
+    8M/Ia3+/rUQJyfxKq+Z96I9Ol4vOe0/Q5yxLfQdUPW5nJkYFPgljAx9cMUOgoafR
+    76vCfo2UZOQKAf/4vfSpz5xETAmTgir132Ix9LWwW5RfbjxynbNSQjNVXMS9mxcJ
+    9bT4JX87tokiLsiD6cryKGC4FZ77srh1oMkxSk/0gyM4HRV5HMGfelTqVUxBI9gA
+    QUnAPtMppuOsq35doCP79JDOx52fAlhuGaYF7OgsBFSZMLtbcVco4zsS5GDln9ls
+    9mCoxOqj8sEkjWdVAP1ZAgMBAAGjgfwwgfkwgZsGA1UdEQSBkzCBkIINY29uanVy
+    LW1hc3RlcoIJbG9jYWxob3N0gjNjb25qdXItbWFzdGVyLmNvbmp1ci1kZXBsb3kt
+    bWljYWguc3ZjLmNsdXN0ZXIubG9jYWyCP2Nvbmp1ci1tYXN0ZXItY29uanVyLWRl
+    cGxveS1taWNhaC5vcGVuc2hpZnQtMzExLml0Y2kuY29uanVyLm5ldDAdBgNVHQ4E
+    FgQUKXPYuX9/YMWmS3w60DTXsWOmpjEwHwYDVR0jBBgwFoAUKXPYuX9/YMWmS3w6
+    0DTXsWOmpjEwDAYDVR0TBAUwAwEB/zALBgNVHQ8EBAMCAeYwDQYJKoZIhvcNAQEL
+    BQADggEBADhoDG62pEPUyHx2SbGKFKSo0obJ+DtETGTT5u48GMHmlj6ooIx/JlQd
+    xTfwbuWZekMR7GvJKAb5t7CMl+N6eAd1+ByUmWJYgJ6liPUkkhysT2SGEcUW991p
+    EGYiQWJ/RoO5MHWlQHJwdMRUoe9AG3XkAFpb1+EzqSyr6PFkDx072X/9p56PN1R5
+    TGH1fS/gT9dQPDyLO99zhFlLCUYrdUaaH2QD9MMP39kToHSvsMTbuPAAFaQlhU3x
+    NCeHiAqTLO3jk7PtCdvJKK5oneJ0LS+7LSBOGOmQjyPSaqdprV6m4qYO5wg1fjQP
+    hKDHkQtKO5M+wmRVCYtc0pE5fhhSjcY=
+    -----END CERTIFICATE-----
+
 ---
 apiVersion: v1
 kind: DeploymentConfig
@@ -65,26 +145,73 @@ spec:
           - name: DB_URL
             value: "postgresql://xapas-p2p.cupksrq0shff.us-east-1.rds.amazonaws.com:5432/xapas_p2p"
         volumeMounts:
-          - mountPath: /data
-            name: data-mount
+          - mountPath: /run/conjur
+            name: conjur-secrets
             readOnly: true
-      - image: 'docker-registry-default.openshift-311.itci.conjur.net/pet-store/filewriter:latest'
+
+      - image: 'docker-registry-default.openshift-311.itci.conjur.net/pet-store/conjur-sidecar:latest'
         imagePullPolicy: Always
-        name: writer
-    
+        name: authenticator
+        env:
+          - name: CONTAINER_MODE
+            value: sidecar
+
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+
+          - name: CONJUR_VERSION
+            value: '5'
+
+          - name: CONJUR_APPLIANCE_URL
+            value: >-
+              https://conjur-follower.conjur-deploy-micah.svc.cluster.local/api
+
+          - name: CONJUR_AUTHN_URL
+            value: >-
+              https://conjur-follower.conjur-deploy-micah.svc.cluster.local/api/authn-k8s/micah
+
+          - name: CONJUR_ACCOUNT
+            value: micah
+
+          - name: CONJUR_AUTHN_LOGIN
+            value: >-
+              host/conjur/authn-k8s/micah/apps/pet-store/*/*
+
+          - name: CONJUR_SSL_CERTIFICATE
+            valueFrom:
+              configMapKeyRef:
+                name: conjur-master
+                key: ssl-certificate
+
         volumeMounts:
-          - mountPath: /data
-            name: data-mount
-          - mountPath: /app/secrets.sh
+          - mountPath: /run/conjur
+            name: conjur-secrets
+
+          - mountPath: secrets.yml
             name: pet-store-secrets-yml
-            subPath: secrets.sh
+            subPath: secrets.yml
           
       imagePullSecrets:
         - name: dockerpullsecret
-      volumes:
-        - name: data-mount
-          emptyDir:
-            medium: Memory
+      volumes: 
         - name: pet-store-secrets-yml
           configMap:
             name: pet-store-secrets-yml
+
+        - name: conjur-secrets
+          emptyDir:
+            medium: Memory

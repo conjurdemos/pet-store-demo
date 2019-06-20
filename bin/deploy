@@ -6,7 +6,8 @@ readonly IMAGE_TAG="$(cat VERSION)"
 readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:${PROJECT_NAME}"
 
 echo "Create project"
-oc delete project pet-store
+oc delete project pet-store --ignore-not-found=true
+oc delete clusterrole pet-store-secrets-access
 oc new-project pet-store
 
 echo "Publish docker images"
@@ -14,12 +15,12 @@ docker login -u _ -p "$(oc whoami -t)" ${DOCKER_REGISTRY_PATH}
 docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${OPENSHIFT_IMAGE}"
 docker push "${OPENSHIFT_IMAGE}"
 
-pushd file_writer
-  docker build . -t "filewriter:latest"
-popd
+# pushd file_writer
+#   docker build . -t "filewriter:latest"
+# popd
 
-docker tag "filewriter:latest" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
-docker push "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/filewriter"
+docker tag "conjur-authn-k8s-client:dev" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/conjur-sidecar"
+docker push "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/conjur-sidecar"
 
 echo "Add pull secret"
 oc secrets new-dockercfg dockerpullsecret \
@@ -31,6 +32,8 @@ oc secrets add serviceaccount/default secrets/dockerpullsecret --for=pull
 
 echo "Create deployment"
 oc create -f deployment.yml
+
+oc create -f rolebinding.yml
 
 echo "Expose service"
 oc expose service/pet-store
