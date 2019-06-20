@@ -7,7 +7,7 @@ readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:
 
 echo "Create project"
 oc delete project pet-store --ignore-not-found=true
-oc delete clusterrole pet-store-secrets-access
+oc delete clusterrole secrets-access --ignore-not-found=true
 oc new-project pet-store
 
 echo "Publish docker images"
@@ -31,12 +31,16 @@ oc secrets new-dockercfg dockerpullsecret \
 oc secrets add serviceaccount/default secrets/dockerpullsecret --for=pull
 
 echo "Create deployment"
-oc create -f deployment.yml
-
-oc create -f rolebinding.yml
+oc create -f cluster-ClusterAdmin.yml
+oc create -f project-ClusterAdmin.yml
+oc create -f project-DevOperator.yml
+oc create -f app-env-DevOperator.yml
+oc create -f app-file-DevOperator.yml
 
 echo "Expose service"
-oc expose service/pet-store
+oc expose service/pet-store-file
+oc expose service/pet-store-env
+
 
 # docker run --rm -i openshift/origin-cli /bin/bash <<EOF
 #   main() {

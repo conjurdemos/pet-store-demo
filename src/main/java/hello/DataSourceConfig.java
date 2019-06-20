@@ -3,6 +3,7 @@ package hello;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.sql.DataSource;
@@ -22,8 +23,17 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource getDataSource() throws IOException {
-        String username = getSecretFromFile("/run/conjur/secrets/DB_USERNAME");
-        String password = getSecretFromFile("/run/conjur/secrets/DB_PASSWORD");
+        String username, password;
+
+        if(useSecretsFromFile()) {
+            username = getSecretFromFile(Paths.get(secretsDirectory(), "DB_USERNAME"));
+            password = getSecretFromFile(Paths.get(secretsDirectory(), "DB_PASSWORD"));
+        } else
+        {
+            username = System.getenv("DB_USERNAME");
+            password = System.getenv("DB_PASSWORD");
+        }
+        
         return DataSourceBuilder
                 .create()
                 .username(username)
@@ -31,8 +41,22 @@ public class DataSourceConfig {
                 .build();
     }
 
-    private String getSecretFromFile(String path) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+    private String getSecretFromFile(Path path) throws IOException {
+        byte[] encoded = Files.readAllBytes(path);
         return new String(encoded, StandardCharsets.UTF_8).trim();
+    }
+
+    private boolean useSecretsFromFile() {
+        String useFileSecrets = System.getenv("USE_FILE_SECRETS");
+        return useFileSecrets != null && useFileSecrets.equalsIgnoreCase("true");
+    }
+
+    private String secretsDirectory() {
+        String secretsDirectory = System.getenv("SECRETS_DIRECTORY");
+        if(secretsDirectory == null || secretsDirectory.isEmpty()) {
+            secretsDirectory = "/run/conjur/secrets";
+        }
+
+        return secretsDirectory;
     }
 }

@@ -1,0 +1,13 @@
+---
+kind: RoleBinding
+apiVersion: v1
+metadata:
+  name: test-app-conjur-authenticator-role-binding-conjur-deploy-micah
+  namespace: pet-store
+subjects:
+  - kind: ServiceAccount
+    name: conjur-cluster
+    namespace: conjur-deploy-micah
+roleRef:
+  kind: ClusterRole
+  name: conjur-authenticator-conjur-deploy-micah
