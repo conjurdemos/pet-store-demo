@@ -1,0 +1,5 @@
+target
+.DS_Store
+
+# Ignore some of the editors' swap files
+*.sw[po]
