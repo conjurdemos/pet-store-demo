@@ -1,0 +1,16 @@
+# Should be loaded to conjur/authn-k8s/CONJUR_ACCOUNT/apps
+- &hosts
+  - !host
+    id: {{ PROJECT_NAME }}/*/*
+    annotations:
+      kubernetes/authentication-container-name: cyberark-secrets-provider
+      openshift: "true"
+  - !host
+    id: {{ PROJECT_NAME }}/service_account/{{ PROJECT_NAME }}
+    annotations:
+      kubernetes/authentication-container-name: cyberark-secrets-provider
+      openshift: "true"
+
+- !grant
+  role: !layer 
+  members: *hosts

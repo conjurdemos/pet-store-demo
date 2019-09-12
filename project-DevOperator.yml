@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ PROJECT_NAME }}
+---
+apiVersion: v1
+kind: RoleBinding
+metadata:
+  namespace: {{ PROJECT_NAME }}
+  name: pet-store-secrets-access-binding
+subjects:
+  - kind: ServiceAccount
+    name: {{ PROJECT_NAME }}
+    namespace: {{ PROJECT_NAME }}
+roleRef:
+  kind: ClusterRole
+  name: secrets-access

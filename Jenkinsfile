@@ -8,6 +8,15 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '30'))
   }
 
+  environment {
+      OPENSHIFT_URL         = 'https://openshift-311.itci.conjur.net:8443'
+      OPENSHIFT_USER        = ''
+      OPENSHIFT_PASSWORD    = ''
+
+      DOCKER_REGISTRY_PATH  = 'docker-registry-default.openshift-311.itci.conjur.net'
+      PROJECT_NAME          = 'p2p-pet-store'
+  }
+
   stages {
     stage('Build Docker image') {
       steps {
@@ -22,15 +31,21 @@ pipeline {
       }
     }
 
-    stage('Publish Docker image to registry') {
-      when {
-        branch 'master'
-      }
-
+    stage('Deploy to OpenShift') {
       steps {
-        sh './bin/publish'
+        sh './bin/deploy'
       }
     }
+
+    // stage('Publish Docker image to registry') {
+    //   when {
+    //     branch 'master'
+    //   }
+
+    //   steps {
+    //     sh './bin/publish'
+    //   }
+    // }
   }
 
   post {

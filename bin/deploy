@@ -1,0 +1,70 @@
+#!/bin/bash -veu
+
+# SET FROM CONJUROPS
+postsgres_username=""
+postsgres_password=""
+
+if [ -z ${postsgres_password} ]; then
+      echo "Set postgres user/password"
+      exit
+fi
+
+readonly IMAGE_NAME="demo-app"
+readonly IMAGE_TAG="$(cat VERSION)"
+readonly OPENSHIFT_IMAGE="${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/${IMAGE_NAME}:${PROJECT_NAME}"
+
+echo "Create project"
+oc delete project $PROJECT_NAME --ignore-not-found=true
+oc delete clusterrole secrets-access --ignore-not-found=true
+oc new-project $PROJECT_NAME
+
+echo "Publish docker images"
+docker login -u _ -p "$(oc whoami -t)" ${DOCKER_REGISTRY_PATH}
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${OPENSHIFT_IMAGE}"
+docker push "${OPENSHIFT_IMAGE}"
+
+docker pull "registry2.itci.conjur.net/cyberark-secrets-provider-for-k8s"
+docker tag "registry2.itci.conjur.net/cyberark-secrets-provider-for-k8s" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/secrets-provider"
+
+docker tag "cyberark-secrets-provider-for-k8s:dev" "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/secrets-provider:dev"
+docker push "${DOCKER_REGISTRY_PATH}/${PROJECT_NAME}/secrets-provider"
+
+echo "Add pull secret"
+oc secrets new-dockercfg dockerpullsecret \
+      --docker-server=${DOCKER_REGISTRY_PATH} \
+      --docker-username=_ \
+      --docker-password=$(oc whoami -t) \
+      --docker-email=_
+oc secrets add serviceaccount/default secrets/dockerpullsecret --for=pull
+
+echo "Create deployment"
+cp cluster-ClusterAdmin.yml tmp-cluster-ClusterAdmin.yml
+sed "s#{{ PROJECT_NAME }}#$PROJECT_NAME#g; s#{{ CONJUR_NAMESPACE_NAME }}#$CONJUR_NAMESPACE_NAME#g" project-ClusterAdmin.yml > tmp-project-ClusterAdmin.yml
+sed "s#{{ PROJECT_NAME }}#$PROJECT_NAME#g" project-DevOperator.yml > tmp-project-DevOperator.yml
+sed "s#{{ PROJECT_NAME }}#$PROJECT_NAME#g; s#{{ AUTHENTICATOR_ID }}#$AUTHENTICATOR_ID#g; s#{{ CONJUR_ACCOUNT }}#$CONJUR_ACCOUNT#g; s#{{ CONJUR_NAMESPACE_NAME }}#$CONJUR_NAMESPACE_NAME#g" app-env-DevOperator.yml | sed '/ssl-certificate:/q'  > tmp-app-env-DevOperator.yml
+oc exec `oc get pods --namespace $CONJUR_NAMESPACE_NAME | grep conjur-cluster -m 1 |  awk '{print $1}'` --namespace $CONJUR_NAMESPACE_NAME cat /opt/conjur/etc/ssl/conjur-master.pem  | while read i; do printf "    %19s\n" "$i"; done  >> tmp-app-env-DevOperator.yml
+
+sed "s#{{ PROJECT_NAME }}#$PROJECT_NAME#g" conjur-k8s-authn-policy.yml > tmp-conjur-k8s-authn-policy.yml
+sed "s#{{ PROJECT_NAME }}#$PROJECT_NAME#g; s#{{ CONJUR_ACCOUNT }}#$CONJUR_ACCOUNT#g" conjur-pet-store-secrets.yml > tmp-conjur-pet-store-secrets.yml
+
+cli_pod=$(oc get pods --namespace $CONJUR_NAMESPACE_NAME | grep cli | awk '{print $1}')
+oc exec --namespace $CONJUR_NAMESPACE_NAME $cli_pod -- conjur authn login -u admin -p $CONJUR_ADMIN_PASSWORD
+
+cat tmp-conjur-k8s-authn-policy.yml | oc exec -i $cli_pod --namespace $CONJUR_NAMESPACE_NAME tee tmp-conjur-k8s-authn-policy.yml
+oc exec --namespace $CONJUR_NAMESPACE_NAME $cli_pod -- conjur policy load conjur/authn-k8s/${AUTHENTICATOR_ID}/apps tmp-conjur-k8s-authn-policy.yml
+
+cat tmp-conjur-pet-store-secrets.yml | oc exec -i $cli_pod --namespace $CONJUR_NAMESPACE_NAME tee tmp-conjur-pet-store-secrets.yml
+oc exec --namespace $CONJUR_NAMESPACE_NAME $cli_pod -- conjur policy load root tmp-conjur-pet-store-secrets.yml
+
+oc exec --namespace $CONJUR_NAMESPACE_NAME $cli_pod -- conjur variable values add secrets/db_username $postsgres_username
+oc exec --namespace $CONJUR_NAMESPACE_NAME $cli_pod -- conjur variable values add secrets/db_password $postsgres_password
+
+oc create -f tmp-cluster-ClusterAdmin.yml
+oc create -f tmp-project-ClusterAdmin.yml
+oc create -f tmp-project-DevOperator.yml
+oc create -f tmp-app-env-DevOperator.yml
+oc create -f k8s-secret.yml
+
+rm tmp-cluster-ClusterAdmin.yml tmp-project-ClusterAdmin.yml tmp-project-DevOperator.yml tmp-app-env-DevOperator.yml tmp-conjur-k8s-authn-policy.yml tmp-conjur-pet-store-secrets.yml
+echo "Expose service"
+oc expose service/pet-store-env

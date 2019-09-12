@@ -2,8 +2,6 @@ spring:
   datasource:
     platform: ${DB_PLATFORM}
     url: jdbc:${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   jpa:
     generate-ddl: true
     hibernate:

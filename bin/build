@@ -5,8 +5,7 @@ set -e
 
 readonly IMAGE_NAME="demo-app"
 readonly IMAGE_TAG="$(cat VERSION)"
-
-docker build \
+docker build --no-cache \
   -t "${IMAGE_NAME}:${IMAGE_TAG}" \
   .
 
