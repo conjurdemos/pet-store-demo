@@ -1,15 +1,12 @@
 # pet-store
 A demo application creating using the Spring Framework. This application requires access to a database.
 
-### Building
-Run `./bin/build`. Requires Docker.
-
-### Running
 When running the pet-store, the following environment variables are expected:  
-`DB_URL` Url or connection string  
-`DB_USERNAME` Username to connect as (not required for secretless)  
-`DB_PASSWORD` Password to connect as (not required for secretless)  
-`DB_PLATFORM` Platform to use in the DDL or DML scripts (such as schema-${platform}.sql or data-${platform}.sql)
+- `DB_URL` Url or connection string.
+- `DB_USERNAME` Username to connect as (not required for secretless).
+- `DB_PASSWORD` Password to connect as (not required for secretless).
+- `DB_PLATFORM` Platform to use in the DDL or DML scripts (such as schema-${platform}.sql
+  or data-${platform}.sql). Supported values of `DB_PLATFORM` are `mysql`, `mssql`, and `postgres`.
 
 ### Routes
 The demo application mocks a pet store service which controls an inventory of pets in a persistent database. The following routes are exposed:
@@ -71,6 +68,10 @@ Return a JSON representation of all environment variables that
 the app knows about
 ##### Returns
 `200`
+
+# Contributing
+
+To learn more about contributing to this repository, please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 # License
 

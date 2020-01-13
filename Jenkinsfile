@@ -19,6 +19,7 @@ pipeline {
       steps {
         sh './test/test postgres'
         sh './test/test mysql'
+        sh './test/test mssql'
       }
     }
 

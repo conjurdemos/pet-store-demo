@@ -7,7 +7,8 @@ services:
       DB_URL:
       DB_USERNAME:
 # common
-      DB_PASSWORD: securerootpass
+      DB_PASSWORD: yourStrong()Password
+
   postgres:
     image: postgres:9.6
     healthcheck:
@@ -16,7 +17,8 @@ services:
       interval: 10s
       retries: 10
     environment:
-      POSTGRES_PASSWORD: securerootpass
+      POSTGRES_PASSWORD: yourStrong()Password
+
   mysql:
     image: mysql/mysql-server:5.7
     healthcheck:
@@ -25,10 +27,25 @@ services:
       interval: 10s
       retries: 10
     environment:
-      MYSQL_ROOT_PASSWORD: securerootpass
+      MYSQL_ROOT_PASSWORD: yourStrong()Password
       MYSQL_DATABASE: mysql
     volumes:
     - ./test.sql:/docker-entrypoint-initdb.d/test.sql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    healthcheck:
+      test: ["CMD-SHELL", "mssql-health-check"]
+      timeout: 10s
+      interval: 10s
+      retries: 10
+    environment:
+      SA_PASSWORD: yourStrong()Password
+      ACCEPT_EULA: Y
+    volumes:
+      - ./mssql-health-check:/usr/local/bin/mssql-health-check
+
   test:
-    image: mysql/mysql-server:5.7
+    build:
+      context: .
     command: sleep infinity
