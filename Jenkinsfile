@@ -16,10 +16,24 @@ pipeline {
     }
 
     stage('Test') {
-      steps {
-        sh './test/test postgres'
-        sh './test/test mysql'
-        sh './test/test mssql'
+      parallel {
+        stage('Test Postgres') {
+          steps {
+            sh './test/test postgres'
+          }
+        }
+
+        stage('Test MySQL') {
+          steps {
+            sh './test/test mysql'
+          }
+        }
+
+        stage('Test MSSQL') {
+          steps {
+            sh './test/test mssql'
+          }
+        }
       }
     }
 
