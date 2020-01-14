@@ -3,7 +3,7 @@
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.5.3-jdk-8-alpine as maven
+FROM maven:3.6.3-jdk-11-slim as maven
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM java:8-jre-alpine
+FROM openjdk:11-jre-slim
 MAINTAINER CyberArk
 
 COPY --from=maven /app/app.jar /app.jar

@@ -17,18 +17,26 @@ mysql)  export DB_PLATFORM=mysql
         export DB_URL=mysql://mysql:3306/mysql
         export DB_USERNAME=mysql
         ;;
+mssql)  export DB_PLATFORM=mssql
+        export DB_URL=sqlserver://mssql:1433;databaseName=tempdb
+        export DB_USERNAME=sa
+        ;;
 *) echo "DATABASE_TYPE $1 is not supported"
    exit 1
    ;;
 esac
 
 cleanup () {
-  docker-compose logs app;
+# Uncomment this line for debugging
+#  docker-compose logs app;
   docker-compose down -v;
 }
 trap cleanup EXIT QUIT INT;
 
-cleanup;
+# set the COMPOSE_PROJECT_NAME for the tests you'll be running
+COMPOSE_PROJECT_NAME="$(openssl rand -hex 3)"
+export COMPOSE_PROJECT_NAME
+
 docker-compose up -d ${DB_PLATFORM};
 
 echo "Waiting for $DB_PLATFORM to start"
@@ -41,6 +49,7 @@ done
 echo ""
 >&2 echo "$DB_PLATFORM is up - continuing"
 
+docker-compose build test
 docker-compose up -d app test;
 
 echo "Waiting for app"
