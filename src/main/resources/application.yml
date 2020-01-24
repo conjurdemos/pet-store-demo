@@ -1,13 +1,24 @@
 spring:
+  application:
+    name: Pet Store
+
   datasource:
     platform: ${DB_PLATFORM}
     url: jdbc:${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    # For mssql, this needs to be `com.microsoft.sqlserver.jdbc.SQLServerDriver`
+    # TODO: Remove me when we are able to auto-set this in startup of app
+    driverClassName: ${DB_DRIVER_CLASS}
+
   jpa:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        # TODO: Remove me when we are able to auto-set this in startup of app
+        dialect: ${DB_DIALECT}
 
 # Uncomment to see detailed logging output
 # logging:
