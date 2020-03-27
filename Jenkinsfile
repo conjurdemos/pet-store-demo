@@ -41,6 +41,15 @@ pipeline {
       }
     }
 
+    stage('Scan Docker image') {
+      steps{
+        script {
+          TAG = sh(returnStdout: true, script: 'cat VERSION')
+        }
+        scanAndReport("demo-app:${TAG}", "NONE")
+      }
+    }
+
     stage('Publish Docker image to registry') {
       when {
         branch 'master'
