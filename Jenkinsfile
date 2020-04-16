@@ -42,11 +42,23 @@ pipeline {
     }
 
     stage('Scan Docker image') {
-      steps{
-        script {
-          TAG = sh(returnStdout: true, script: 'cat VERSION')
+      parallel {
+        stage('Scan Docker image for fixable issues') {
+          steps{
+            script {
+              TAG = sh(returnStdout: true, script: 'cat VERSION')
+            }
+            scanAndReport("demo-app:${TAG}", "NONE", false)
+          }
         }
-        scanAndReport("demo-app:${TAG}", "NONE")
+        stage('Scan Docker image for all issues') {
+          steps{
+            script {
+              TAG = sh(returnStdout: true, script: 'cat VERSION')
+            }
+            scanAndReport("demo-app:${TAG}", "NONE", true)
+          }
+        }
       }
     }
 
