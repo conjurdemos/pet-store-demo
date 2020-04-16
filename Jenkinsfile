@@ -48,7 +48,7 @@ pipeline {
             script {
               TAG = sh(returnStdout: true, script: 'cat VERSION')
             }
-            scanAndReport("demo-app:${TAG}", "NONE", false)
+            scanAndReport("demo-app:${TAG}", "HIGH", false)
           }
         }
         stage('Scan Docker image for all issues') {
