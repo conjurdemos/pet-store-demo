@@ -24,6 +24,9 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 FROM openjdk:11-jre-slim
 MAINTAINER CyberArk
 
+# Temp Fix for CVE-2021-23840 and CVE-2021-23841
+RUN apt-get -y --purge remove openssl
+
 COPY --from=maven /app/app.jar /app.jar
 
 ENTRYPOINT [ "java", "-jar", "/app.jar"]
