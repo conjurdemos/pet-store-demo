@@ -21,7 +21,7 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM openjdk:11-jre-slim
+FROM openjdk:17-ea-10-jdk-oraclelinux8
 MAINTAINER CyberArk
 
 COPY --from=maven /app/app.jar /app.jar
