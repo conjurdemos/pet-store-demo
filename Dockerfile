@@ -2,6 +2,20 @@
 # See https://docs.docker.com/develop/develop-images/multistage-build/
 
 # STAGE:
+# Fetch summon
+
+FROM ruby:2.4 as summon
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl
+
+# Install summon and summon-conjur
+RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.sh \
+      | env TMPDIR=$(mktemp -d) bash && \
+    curl -sSL https://raw.githubusercontent.com/cyberark/summon-conjur/master/install.sh \
+      | env TMPDIR=$(mktemp -d) bash
+
+# STAGE:
 # The 'maven' base is used to package the application
 FROM maven:3.6.3-jdk-11-slim as maven
 
@@ -24,6 +38,8 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 FROM openjdk:11-jre-slim
 MAINTAINER CyberArk
 
+COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
+COPY --from=summon /usr/local/bin/summon /usr/local/bin/summon
 COPY --from=maven /app/app.jar /app.jar
 
 ENTRYPOINT [ "java", "-jar", "/app.jar"]
