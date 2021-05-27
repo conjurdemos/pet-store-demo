@@ -64,7 +64,7 @@ pipeline {
 
     stage('Publish Docker image to registry') {
       when {
-        branch 'master'
+        branch 'main'
       }
 
       steps {
