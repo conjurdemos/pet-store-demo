@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.6.3-jdk-11-slim as maven
+FROM maven:3.8.1-jdk-11-slim as maven
 
 WORKDIR /app
 
