@@ -64,7 +64,11 @@ pipeline {
 
     stage('Publish Docker image to registry') {
       when {
-        branch 'main'
+        // Only run this stage when it's a tag build matching vA.B.C
+        tag(
+          pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+\$",
+          comparator: "REGEXP"
+        )
       }
 
       steps {

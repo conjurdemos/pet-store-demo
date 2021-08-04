@@ -7,17 +7,8 @@ readonly REGISTRY="${1:-cyberark}"
 readonly IMAGE_NAME="demo-app"
 readonly IMAGE_TAG="$(cat VERSION)"
 
-# fetching tags is required for git_description to work
-git fetch --tags
-git_description=$(git describe --tags)
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/${IMAGE_NAME}:latest"
 
-# only publish images when the tag matches the VERSION
-if [ "$git_description" = "v${IMAGE_TAG}" ]; then
-  echo "Revision $git_description matches version $VERSION exactly. Pushing to Dockerhub..."
-
-  docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
-  docker tag "${IMAGE_NAME}:${IMAGE_TAG}" "${REGISTRY}/${IMAGE_NAME}:latest"
-
-  docker push "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
-  docker push "${REGISTRY}/${IMAGE_NAME}:latest"
-fi
+docker push "${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+docker push "${REGISTRY}/${IMAGE_NAME}:latest"
