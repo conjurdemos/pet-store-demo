@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Includes binaries for 'summon' and 'summon-conjur' in the Pet Store
+  application Docker image. This avoids the extra step of building a custom
+  application image to include these binaries in scenarios where they are
+  needed.
+
 ## [1.1.0] - 2020-01-13
 
 ### Added
