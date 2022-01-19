@@ -23,7 +23,7 @@ class PetController {
 
   @GetMapping("/{id}")
   ResponseEntity<Pet> getPet(@PathVariable Long id) {
-      Pet pet = repository.findById(id).orElseThrow();
+      Pet pet = repository.findById(id).orElseThrow(null);
       if (pet == null) {
         return ResponseEntity.notFound().build();
       }
@@ -47,7 +47,7 @@ class PetController {
 
   @DeleteMapping("/{id}")
   ResponseEntity<?> deletePet(@PathVariable Long id) {
-    Pet pet = repository.findById(id).orElseThrow();
+    Pet pet = repository.findById(id).orElseThrow(null);
     if (pet == null) {
       return ResponseEntity.notFound().build();
     }

@@ -4,7 +4,7 @@
 # STAGE:
 # Fetch summon
 
-FROM ruby:2.4 as summon
+FROM ruby:2.5 as summon
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl
@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.6.3-jdk-11-slim as maven
+FROM maven:3.8.4-openjdk-11-slim as maven
 
 WORKDIR /app
 
@@ -35,8 +35,8 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM openjdk:11-jre-slim
-MAINTAINER CyberArk
+FROM openjdk:11-jdk-slim
+LABEL org.opencontainers.image.authors="CyberArk"
 
 COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
 COPY --from=summon /usr/local/bin/summon /usr/local/bin/summon
