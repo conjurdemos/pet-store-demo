@@ -4,7 +4,7 @@
 # STAGE:
 # Fetch summon
 
-FROM ruby:2.5 as summon
+FROM ruby:3.0 as summon
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl
@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.8.4-openjdk-11-slim as maven
+FROM maven:3.8.5-openjdk-11-slim as maven
 
 WORKDIR /app
 
@@ -37,6 +37,9 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # and builds the final image
 FROM openjdk:11-jdk-slim
 LABEL org.opencontainers.image.authors="CyberArk"
+
+# Install the fix for CVE-2022-1271
+RUN apt-get update && apt-get dist-upgrade -y
 
 COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
 COPY --from=summon /usr/local/bin/summon /usr/local/bin/summon
