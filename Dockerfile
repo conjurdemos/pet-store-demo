@@ -4,7 +4,7 @@
 # STAGE:
 # Fetch summon
 
-FROM ruby:2.5 as summon
+FROM ruby:3.0 as summon
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl
@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.8.4-openjdk-11-slim as maven
+FROM maven:3.8.5-openjdk-11-slim as maven
 
 WORKDIR /app
 
