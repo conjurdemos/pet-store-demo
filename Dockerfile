@@ -38,6 +38,9 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 FROM openjdk:11-jdk-slim
 LABEL org.opencontainers.image.authors="CyberArk"
 
+# Install the fix for CVE-2022-1271
+RUN apt-get update && apt-get dist-upgrade -y
+
 COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
 COPY --from=summon /usr/local/bin/summon /usr/local/bin/summon
 COPY --from=maven /app/app.jar /app.jar
