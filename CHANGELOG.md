@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Upgraded Spring to 2.6.9
+  [conjurdemos/pet-store-demo#49](https://github.com/conjurdemos/pet-store-demo/pull/49)
 - Upgraded Spring to 2.6.7 & Maven/Ruby containers to latest versions
   [conjurdemos/pet-store-demo#48](https://github.com/conjurdemos/pet-store-demo/pull/48)
 - Upgraded Postgres to 42.3.2 to resolve CVE-2022-21724
