@@ -31,9 +31,13 @@
       <version>8.0.30</version>
     </dependency>
     <dependency>
+      <!-- TODO: Bumping this to 11.2.1.jre11 causes the MSSQL tests to 
+        fail. No error message was given, but it looks like it's a time out
+        issue. There's something in the major version updates that's breaking.
+        We need to investigate what that is. -->
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>
-      <version>11.2.1.jre11</version>
+      <version>9.4.1.jre11</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
