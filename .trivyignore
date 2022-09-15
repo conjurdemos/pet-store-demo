@@ -1,3 +1,17 @@
+# CVE-2022-25857
+# The package org.yaml:snakeyaml from 0 and before 1.31 are vulnerable to Denial of 
+# Service (DoS) due missing to nested depth limitation for collections.
+#
+# org.yaml/snakeyaml is an indirect dependency we get from spring boot. A 
+# spring boot maintainer stated that "Most Sping Boot applications only need 
+# SnakeYaml to parse their own application.yml configuration. I don't
+# think we can consider this content as untrusted input." I take this to mean
+# we're likely not vulnerable to this issue. It should be fixed in Spring Boot
+# 2.7.4, which as of 9/15 is not yet released. Snyk will notify us when a fix
+# is available. At that time, we should remove this entry from the .trivyignore.
+CVE-2022-25857
+
+
 # CVE-2021-23840
 # Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may overflow 
 # the output length argument in some cases where the input length is close to the
