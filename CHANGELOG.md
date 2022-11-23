@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Updated postgresql to 42.5.1 to resolve CVE-2022-41946
+  [conjurdemos/pet-store-demo#57](https://github.com/conjurdemos/pet-store-demo/pull/57)
 - Updated Spring boot to 2.7.5 to pull in fixes for jackson-databind for
    CVE-2022-42003 and CVE-2022-42004
    [conjurdemos/pet-store-demo#56](https://github.com/conjurdemos/pet-store-demo/pull/56)
