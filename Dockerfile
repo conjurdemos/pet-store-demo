@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.8.5-openjdk-11-slim as maven
+FROM maven:3-openjdk-18-slim as maven
 
 WORKDIR /app
 
@@ -35,7 +35,7 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM openjdk:11-jdk-slim
+FROM openjdk:21-slim
 LABEL org.opencontainers.image.authors="CyberArk"
 
 # Install the fix for CVE-2022-1271
