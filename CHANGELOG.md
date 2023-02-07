@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Security
+- Updated Springboot to 3.0.2 and Dockerfile to openjdk:21
+  [conjurdemos/pet-store-demo#58](https://github.com/conjurdemos/pet-store-demo/pull/58)
 - Updated postgresql to 42.5.1 to resolve CVE-2022-41946
   [conjurdemos/pet-store-demo#57](https://github.com/conjurdemos/pet-store-demo/pull/57)
 - Updated Spring boot to 2.7.5 to pull in fixes for jackson-databind for
