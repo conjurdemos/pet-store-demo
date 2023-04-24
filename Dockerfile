@@ -35,11 +35,8 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM openjdk:21-slim
+FROM eclipse-temurin:20-jre-alpine
 LABEL org.opencontainers.image.authors="CyberArk"
-
-# Install the fix for CVE-2022-1271
-RUN apt-get update && apt-get dist-upgrade -y
 
 COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
 COPY --from=summon /usr/local/bin/summon /usr/local/bin/summon

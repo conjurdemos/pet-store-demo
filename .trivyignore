@@ -1,55 +1,8 @@
-# CVE-2022-25857
-# The package org.yaml:snakeyaml from 0 and before 1.31 are vulnerable to Denial of 
-# Service (DoS) due missing to nested depth limitation for collections.
-#
-# org.yaml/snakeyaml is an indirect dependency we get from spring boot. A 
-# spring boot maintainer stated that "Most Sping Boot applications only need 
-# SnakeYaml to parse their own application.yml configuration. I don't
-# think we can consider this content as untrusted input." I take this to mean
-# we're likely not vulnerable to this issue. It should be fixed in Spring Boot
-# 2.7.4, which as of 9/15 is not yet released. Snyk will notify us when a fix
-# is available. At that time, we should remove this entry from the .trivyignore.
-CVE-2022-25857
-
-
-# CVE-2021-23840
-# Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may overflow 
-# the output length argument in some cases where the input length is close to the
-# maximum permissable length for an integer on the platform. In such cases the return
-# value from the function call will be 1 (indicating success), but the output length
-# value will be negative. This could cause applications to behave incorrectly or crash.
-# OpenSSL versions 1.1.1i and below are affected by this issue. Users of these versions
-# should upgrade to OpenSSL 1.1.1j. OpenSSL versions 1.0.2x and below are affected by
-# this issue. However OpenSSL 1.0.2 is out of support and no longer receiving public
-# updates. Premium support customers of OpenSSL 1.0.2 should upgrade to 1.0.2y. Other
-# users should upgrade to 1.1.1j. Fixed in OpenSSL 1.1.1j (Affected 1.1.1-1.1.1i).
-# Fixed in OpenSSL 1.0.2y (Affected 1.0.2-1.0.2x).
-#
-# We've determined that we are not impacted by this vulnerability because:
-# - we do not directly make any calls to the affected methods
-#
-# Performed by @daneleblanc, approved by @andytinkham
-CVE-2021-23840
-
-# CVE-2021-23840
-# The OpenSSL public API function X509_issuer_and_serial_hash() attempts to create a
-# unique hash value based on the issuer and serial number data contained within an X509
-# certificate. However it fails to correctly handle any errors that may occur while
-# parsing the issuer field (which might occur if the issuer field is maliciously
-# constructed). This may subsequently result in a NULL pointer deref and a crash
-# leading to a potential denial of service attack. The function
-# X509_issuer_and_serial_hash() is never directly called by OpenSSL itself so
-# applications are only vulnerable if they use this function directly and they use
-# it on certificates that may have been obtained from untrusted sources. OpenSSL
-# versions 1.1.1i and below are affected by this issue. Users of these versions should
-# upgrade to OpenSSL 1.1.1j. OpenSSL versions 1.0.2x and below are affected by this
-# issue. However OpenSSL 1.0.2 is out of support and no longer receiving public updates.
-# Premium support customers of OpenSSL 1.0.2 should upgrade to 1.0.2y. Other users should
-# upgrade to 1.1.1j. Fixed in OpenSSL 1.1.1j (Affected 1.1.1-1.1.1i). Fixed in OpenSSL 1.0.2y
-# (Affected 1.0.2-1.0.2x).
-#
-# We've determined that we are not impacted by this vulnerability because:
-# - we do not directly make any calls to the affected methods
-#
-# Performed by @daneleblanc, approved by @andytinkham
-CVE-2021-23841
+# The following 4 CVEs are in indirect dependencies. There is no easy workaround to avoid
+# them and they are not exploitable in our application. Additionally this application is only
+# used for demos so harm from DoS attacks is very limited. We will ignore them until they
+# are fixed in the indirect dependencies.
+CVE-2022-3510
+CVE-2022-3171
+CVE-2022-3509
+CVE-2022-1471
