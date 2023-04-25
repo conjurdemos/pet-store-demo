@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.1] - 2023-04-24
+
 ### Security
-- Updated Springboot to 3.0.2 and Dockerfile to openjdk:21
+- Updated Spring boot to 3.0.6 and Dockerfile to eclipse-temurin
+  [conjurdemos/pet-store-demo#60](https://github.com/conjurdemos/pet-store-demo/pull/60)
+- Updated Spring boot to 3.0.2 and Dockerfile to openjdk:21
   [conjurdemos/pet-store-demo#58](https://github.com/conjurdemos/pet-store-demo/pull/58)
 - Updated postgresql to 42.5.1 to resolve CVE-2022-41946
   [conjurdemos/pet-store-demo#57](https://github.com/conjurdemos/pet-store-demo/pull/57)
@@ -46,5 +51,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/secretless-broker/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/cyberark/secretless-broker/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/cyberark/secretless-broker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cyberark/secretless-broker/compare/v1.1.0...v1.2.0
