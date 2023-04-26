@@ -10,7 +10,7 @@ services:
       DB_PASSWORD: yourStrong()Password
 
   postgres:
-    image: postgres:9.6
+    image: postgres:15.2-alpine
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       timeout: 10s
@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: yourStrong()Password
 
   mysql:
-    image: mysql/mysql-server:5.7
+    image: mysql/mysql-server:8.0
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping"]
       timeout: 10s
@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: yourStrong()Password
 
   mssql:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     healthcheck:
       test: ["CMD-SHELL", "mssql-health-check"]
       timeout: 10s

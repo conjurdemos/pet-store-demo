@@ -14,11 +14,11 @@ postgres) export DB_PLATFORM=postgres
           export DB_USERNAME=postgres
           ;;
 mysql)  export DB_PLATFORM=mysql
-        export DB_URL=mysql://mysql:3306/mysql?useSSL=false
+        export DB_URL="mysql://mysql:3306/mysql?useSSL=false&allowPublicKeyRetrieval=true"
         export DB_USERNAME=mysql
         ;;
 mssql)  export DB_PLATFORM=mssql
-        export DB_URL=sqlserver://mssql:1433;databaseName=tempdb
+        export DB_URL="sqlserver://mssql:1433;databaseName=tempdb;trustServerCertificate=true"
         export DB_USERNAME=sa
         ;;
 *) echo "DATABASE_TYPE $1 is not supported"
