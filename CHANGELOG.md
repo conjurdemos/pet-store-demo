@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Security
+- Upgrade mysql-connector-java to v8.0.33
+  [conjurdemos/pet-store-demo#62](https://github.com/conjurdemos/pet-store-demo/pull/62)
 - Update DB drivers and test base images
   [conjurdemos/pet-store-demo#61](https://github.com/conjurdemos/pet-store-demo/pull/61)
 
