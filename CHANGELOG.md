@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Shifted tests to use `docker compose` instead of `docker-compose` 
+  [conjurdemos/pet-store-demo#70](https://github.com/conjurdemos/pet-store-demo/pull/70)
+
 ### Security
+- Upgrade spring-boot to 3.2.1 and Java to 11
+  [conjurdemos/pet-store-demo#70](https://github.com/conjurdemos/pet-store-demo/pull/70)
 - Upgrade spring-boot to 3.0.7 for CVE-2023-20883
   [conjurdemos/pet-store-demo#63](https://github.com/conjurdemos/pet-store-demo/pull/63)
 - Upgrade mysql-connector-java to v8.0.33
