@@ -29,7 +29,7 @@ esac
 cleanup () {
 # Uncomment this line for debugging
 #  docker-compose logs app;
-  docker-compose down -v;
+  docker compose down -v;
 }
 trap cleanup EXIT QUIT INT;
 
@@ -37,10 +37,10 @@ trap cleanup EXIT QUIT INT;
 COMPOSE_PROJECT_NAME="$(openssl rand -hex 3)"
 export COMPOSE_PROJECT_NAME
 
-docker-compose up -d ${DB_PLATFORM};
+docker compose up -d ${DB_PLATFORM};
 
 echo "Waiting for $DB_PLATFORM to start"
-while ! docker-compose ps ${DB_PLATFORM} | grep healthy > /dev/null 2>&1;
+while ! docker compose ps ${DB_PLATFORM} | grep healthy > /dev/null 2>&1;
   do
     >&2 printf '. '
     sleep 1
@@ -49,11 +49,11 @@ done
 echo ""
 >&2 echo "$DB_PLATFORM is up - continuing"
 
-docker-compose build test
-docker-compose up -d app test;
+docker compose build test
+docker compose up -d app test;
 
 echo "Waiting for app"
-docker-compose exec -T test timeout 200 bash -c "
+docker compose exec -T test timeout 200 bash -c "
 while ! curl -v app:8080 > /dev/null 2>&1;
 do
   >&2 printf '. '
@@ -67,9 +67,9 @@ echo ""
 echo ""
 echo 'Creating pet:'
 echo '{"name": "Mr. Init"}'
-docker-compose exec -T test curl -s -d '{"name": "Mr. Init"}' -H "Content-Type: application/json" app:8080/pet
+docker compose exec -T test curl -s -d '{"name": "Mr. Init"}' -H "Content-Type: application/json" app:8080/pet
 
 echo "Retrieving pet:"
-docker-compose exec -T test curl -s app:8080/pets
+docker compose exec -T test curl -s app:8080/pets
 echo ""
 echo ""
