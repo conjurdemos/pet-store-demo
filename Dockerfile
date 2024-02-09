@@ -17,7 +17,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.s
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.9.5-amazoncorretto-21-debian as maven
+FROM maven:3.9.6-amazoncorretto-21-debian as maven
 
 WORKDIR /app
 
