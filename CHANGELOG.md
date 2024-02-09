@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.2] - 2024-02-09
+
 ### Changed
 - Shifted tests to use `docker compose` instead of `docker-compose` 
   [conjurdemos/pet-store-demo#70](https://github.com/conjurdemos/pet-store-demo/pull/70)
 
 ### Security
+- Upgrade spring-boot and other dependencies to latest versions
+  [conjurdemos/pet-store-demo#71](https://github.com/conjurdemos/pet-store-demo/pull/71)
 - Upgrade spring-boot to 3.2.1 and Java to 11
   [conjurdemos/pet-store-demo#70](https://github.com/conjurdemos/pet-store-demo/pull/70)
 - Upgrade spring-boot to 3.0.7 for CVE-2023-20883
@@ -65,6 +69,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/secretless-broker/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/cyberark/secretless-broker/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/cyberark/secretless-broker/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/cyberark/secretless-broker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/cyberark/secretless-broker/compare/v1.1.0...v1.2.0
