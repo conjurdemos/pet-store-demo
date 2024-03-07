@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Security
+- Upgrade postgres connector to v42.7.2 for CVE-2023-1597, aa well as Spring Framework to 3.2.3, com.microsoft.sqlserver to 12.6.1, and maven enforcer to 3.4.1 [conjurdemos/pet-store-demo#74](https://github.com/conjurdemos/pet-store-demo/pull/74)
+
 ## [1.2.2] - 2024-02-09
 
 ### Changed
