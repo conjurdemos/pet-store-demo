@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.4] - 2024-03-22
+
+### Security
+- Upgrade Spring Boot to 3.2.4 for CVE-2024-22259 [conjurdemos/pet-store-demo#76](https://github.com/conjurdemos/pet-store-demo/pull/76)
+
 ## [1.2.3] - 2024-03-07
 
 ### Security
