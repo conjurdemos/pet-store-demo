@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.4] - 2024-03-22
+
+### Security
+- Upgrade Spring Boot to 3.2.4 for CVE-2024-22259 [conjurdemos/pet-store-demo#76](https://github.com/conjurdemos/pet-store-demo/pull/76)
+
 ## [1.2.3] - 2024-03-07
 
 ### Security
@@ -74,8 +79,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 The first tagged version.
 
-[Unreleased]: https://github.com/cyberark/secretless-broker/compare/v1.2.3...HEAD
-[1.2.3]: https://github.com/cyberark/secretless-broker/compare/v1.2.2...v1.2.3
-[1.2.2]: https://github.com/cyberark/secretless-broker/compare/v1.2.1...v1.2.2
-[1.2.1]: https://github.com/cyberark/secretless-broker/compare/v1.2.0...v1.2.1
-[1.2.0]: https://github.com/cyberark/secretless-broker/compare/v1.1.0...v1.2.0
+[Unreleased]: https://github.com/conjurdemos/pet-store-demo/compare/v1.2.4...HEAD
+[1.2.4]: https://github.com/conjurdemos/pet-store-demo/compare/v1.2.3...v1.2.4
+[1.2.3]: https://github.com/conjurdemos/pet-store-demo/compare/v1.2.2...v1.2.3
+[1.2.2]: https://github.com/conjurdemos/pet-store-demo/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/conjurdemos/pet-store-demo/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/conjurdemos/pet-store-demo/compare/v1.1.0...v1.2.0
