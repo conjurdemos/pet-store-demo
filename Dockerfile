@@ -4,15 +4,14 @@
 # STAGE:
 # Fetch summon
 
-FROM ruby:3 as summon
+FROM alpine as summon
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl
+RUN apk add --no-cache curl bash
 
 # Install summon and summon-conjur
-RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/master/install.sh \
+RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/main/install.sh \
       | env TMPDIR=$(mktemp -d) bash && \
-    curl -sSL https://raw.githubusercontent.com/cyberark/summon-conjur/master/install.sh \
+    curl -sSL https://raw.githubusercontent.com/cyberark/summon-conjur/main/install.sh \
       | env TMPDIR=$(mktemp -d) bash
 
 # STAGE:
