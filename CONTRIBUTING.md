@@ -19,6 +19,11 @@ Run `./bin/build`. Requires Docker.
 To test against a specific database type, run `./test/test {db type}`, where
 **db type** is `mysql`, `postgres`, or `mssql`.
 
+## Updating Dependencies
+
+To automatically update Java dependencies to their latest versions, run
+`docker run --rm -it -v $(pwd):/src -w /src maven:3.9.9-amazoncorretto-21-debian mvn versions:use-latest-versions`
+
 ## Releasing
 - Update the [VERSION](VERSION)
 - Update the [CHANGELOG](CHANGELOG.md)
