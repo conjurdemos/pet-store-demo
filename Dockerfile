@@ -4,7 +4,7 @@
 # STAGE:
 # Fetch summon
 
-FROM alpine as summon
+FROM alpine AS summon
 
 RUN apk add --no-cache curl bash
 
@@ -16,7 +16,7 @@ RUN curl -sSL https://raw.githubusercontent.com/cyberark/summon/main/install.sh 
 
 # STAGE:
 # The 'maven' base is used to package the application
-FROM maven:3.9.9-amazoncorretto-21-debian as maven
+FROM maven:3.9.9-amazoncorretto-21-debian AS maven
 
 WORKDIR /app
 
