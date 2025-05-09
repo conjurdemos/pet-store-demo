@@ -9,3 +9,4 @@ CVE-2024-38819
 CVE-2024-34156
 
 CVE-2025-24813 # Not vulnerable (requires writes enabled for the default servlet)
+CVE-2025-22235 # Not vulnerable (we're using a patched version)

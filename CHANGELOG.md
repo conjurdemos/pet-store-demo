@@ -6,10 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.6] - 2025-05-09
+
+### Security
+- Upgrade dependencies to latest versions
+  [conjurdemos/pet-store-demo#81](https://github.com/conjurdemos/pet-store-demo/pull/81)
+
 ## [1.2.5] - 2025-04-04
 
 ### Security
-
 - Upgrade dependencies to latest versions
   [conjurdemos/pet-store-demo#78](https://github.com/conjurdemos/pet-store-demo/pull/78), [conjurdemos/pet-store-demo#79](https://github.com/conjurdemos/pet-store-demo/pull/79), CONJSE-1949
 - Switch to alpine base image, upgrade Spring Boot to 3.3.1

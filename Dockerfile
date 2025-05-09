@@ -34,7 +34,7 @@ RUN mvn package && cp target/petstore-*.jar app.jar
 # This base is used for the final image
 # It extracts the packaged application from the previous stage
 # and builds the final image
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:24-jre
 LABEL org.opencontainers.image.authors="CyberArk"
 
 COPY --from=summon /usr/local/lib/summon /usr/local/lib/summon
