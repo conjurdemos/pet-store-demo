@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.2.6] - 2025-05-09
 
 ### Security
+- Upgrade Spring Boot to v3.5.0 and postgres connector to v42.7.7
+  [conjurdemos/pet-store-demo#86](https://github.com/conjurdemos/pet-store-demo/pull/86)
 - Upgrade dependencies to latest versions
   [conjurdemos/pet-store-demo#81](https://github.com/conjurdemos/pet-store-demo/pull/81)
 
