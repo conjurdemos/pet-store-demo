@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.2.6] - 2025-05-09
+## [1.2.6] - 2025-07-31
 
 ### Security
+- Upgrade Spring Boot to v3.5.4, migrate JAXB from javax.xml.bind to jakarta.xml.bind v4.0.2 (Jakarta EE transition), and update dependencies to latest versions
+  [conjurdemos/pet-store-demo#88](https://github.com/conjurdemos/pet-store-demo/pull/88)
 - Upgrade Spring Boot to v3.5.0 and postgres connector to v42.7.7
   [conjurdemos/pet-store-demo#86](https://github.com/conjurdemos/pet-store-demo/pull/86)
 - Upgrade dependencies to latest versions
