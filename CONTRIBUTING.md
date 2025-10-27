@@ -28,7 +28,7 @@ To test against a specific database type, run `./test/test {db type}`, where
 ## Updating Dependencies
 
 To automatically update Java dependencies to their latest versions, run
-`docker run --rm -it -v $(pwd):/src -w /src maven:3.9.9-amazoncorretto-21-debian mvn versions:use-latest-versions`
+`docker run --rm -it -v $(pwd):/src -w /src maven:3.9.9-amazoncorretto-21-debian mvn versions:use-latest-versions -DprocessParent=true`
 
 ## Releasing
 
